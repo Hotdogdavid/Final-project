@@ -1,0 +1,236 @@
+var currentScreen = 0;
+var gameState = "rules";
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+};
+
+Button.prototype.draw = function() {
+    fill(0, 234, 255);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x+10, this.y+this.height/4);
+};
+
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+
+var startButton = new Button({
+    x: 133,
+    y: 100,
+    label: "        Start",
+    onClick: function() {
+        currentScreen = 1;
+    }
+});
+
+var mainScreen = function () {
+    background(237, 130, 130);
+    currentScreen = 1;
+    textSize(12);
+    text("This is where the game will be introduced", 89, 6);
+   // Adding Blackjack rules
+  var rulesText = "Rules of Blackjack:\n\n" +
+        "1. The goal is to have a hand value closer to 21 than the dealer's hand without exceeding 21.\n\n" +
+        "2. Numbered cards are worth their face value, face cards (Jack, Queen, King) are worth 10, and Ace can be 1 or 11 depending on how you want to view it.\n\n" +
+        "3. Players can 'Hit' to receive another card or 'Stand' to keep their current hand.\n\n" +
+        "4. The Player is allowed to hit multiple times if they feel it is needed.\n\n" +
+        "5. If the player's hand exceeds 21, they 'Bust' and lose the round.\n\n" +
+        "6. The dealer hits until their hand value is 17 or higher.\n\n" +
+        "7. The round ends when both the player and the dealer stand or when one busts.";
+    
+    fill(0); // Set text color to black
+    text(rulesText, 12, 29, width - 38, height - 40);
+};
+
+
+    
+var splashScreen = function() {
+        background(237, 237, 237); //  background for splash screen
+        currentScreen = 0;
+        textSize(24);
+        fill(0);
+        text("Welcome to Our Blackjack Game",28, 54); // Text displaying app name
+        textSize(20);
+        text("Partner 1: Bryan", 26, 369); // Partner 1's Name 
+        text("Partner 2: David", 235, 369); // Partner 2's Name
+        startButton.draw();
+      noStroke();
+var drawHead= function (x,y,h){
+    var p = h/100;
+fill(250, 209, 165); // skin tone
+ellipse(x+(p*100),y+(p*100),p*83,p*100); // head
+
+fill(237, 237, 237);
+arc(x+(p*58),y+(p*137),p*28,p*55,0,361); // left chisel 
+arc(x+(p*142),y+(p*137),p*28,p*55,0,361); // right chisel
+
+
+fill(165,42,42);
+quad(x+(p*50),y+(p*100),x+(p*63),y+(p*68),x+(p*90),y+(p*50),x+(p*70),y+(p*99)); // left hair
+quad(x+(p*149),y+(p*98),x+(p*134),y+(p*68),x+(p*113),y+(p*50),x+(p*135),y+(p*97)); // right hair
+ellipse(x+(p*100),y+(p*63),p*62,p*28); //top hair
+
+fill(0, 0, 0);
+ellipse(x+(p*101),y+(p*63),p*75,p*31); // Top of Hat
+ellipse(x+(p*132),y+(p*74),p*72,p*11); // Side of Hat
+
+fill(255, 255, 255);
+ellipse(x+(p*117),y+(p*100),p*15,p*15); // Right eye
+ellipse(x+(p*90),y+(p*100),p*15,p*15); // Left eye
+
+fill(165,42,42);
+ellipse(x+(p*90),y+(p*100),p*5,p*5); // Left eye pupil 
+ellipse(x+(p*117),y+(p*100),p*5,p*5); // Right eye pupil
+
+strokeWeight(2);
+fill(250, 209, 165); // skin tone
+stroke(0, 0, 0);
+bezier(x+(p*100),y+(p*100),x+(p*121),y+(p*122),x+(p*92),y+(p*120),x+(p*96),y+(p*115)); // nose
+
+stroke(0, 0, 0);
+fill(255, 255, 255); // white fill for mouth
+arc(x+(p*103),y+(p*125),p*30,p*13,1,180); // mouth
+line(x+(p*86),y+(p*124),x+(p*119),y+(p*124)); // top of mouth
+
+noStroke();
+fill(250, 209, 165);
+arc(x+(p*102),y+(p*144),p*57,p*22,19,380); // neck
+
+    
+    
+};
+var drawBody= function(x,y,h){
+noStroke();
+ var p = h/100;
+fill(0, 0, 0);
+quad(x+(p*30),y+(p*194),x+(p*63),y+(p*138),x+(p*101),y+(p*147),x+(p*99),y+(p*203)); // left side shirt
+quad(x+(p*176),y+(p*201),x+(p*139),y+(p*135),x+(p*96),y+(p*146),x+(p*94),y+(p*202)); // Right side shirt
+
+
+stroke(255,215,0);
+line(x+(p*129),y+(p*141),x+(p*98),y+(p*164));//Left side chain
+line(x+(p*74),y+(p*141),x+(p*98),y+(p*164)); // right side chain
+
+stroke(255, 255, 255);
+strokeWeight(2);
+line(x+(p*65),y+(p*156),x+(p*64),y+(p*188)); // B
+line(x+(p*79),y+(p*166),x+(p*65),y+(p*166)); // B
+line(x+(p*79),y+(p*166),x+(p*79),y+(p*157)); // B
+line(x+(p*78),y+(p*157),x+(p*65),y+(p*157)); // B
+line(x+(p*81),y+(p*183),x+(p*70),y+(p*166)); // B
+line(x+(p*81),y+(p*182),x+(p*63),y+(p*185)); // B
+
+line(x+(p*126),y+(p*156),x+(p*127),y+(p*188)); // R
+line (x+(p*126),y+(p*173),x+(p*146),y+(p*189)); // R
+line(x+(p*125),y+(p*157),x+(p*142),y+(p*157)); // R
+line(x+(p*127),y+(p*176),x+(p*141),y+(p*159)); // R
+};
+
+var drawBitmoji= function(x,y,h){
+    drawHead(x,y,h);
+    drawBody(x,y,h);
+};
+drawBitmoji(41,248,55);
+
+var drawDavid = function(x,y,h){
+    var p = h/100;
+    fill(235, 171, 127);
+    ellipse(x+78*p,y+94*p,77*p,100*p); // face
+    fill(143, 79, 79);
+    ellipse(x+60*p,y+80*p,15*p,15*p); // left eye
+    ellipse(x+92*p,y+79*p,15*p,15*p); // right eye
+    fill(255, 255, 255); // mouth
+    arc(x+78*p,y+118*p,44*p,11*p,-86,274);
+    fill(23, 21, 21); // chest
+    quad(x+136*p,y+134*p,x+128*p,y+134*p,x+20*p,y+134*p,x+76*p,y+198*p);
+    fill(0, 0, 0); // chain
+    stroke(230, 255, 0);
+    arc(x+78*p,y+136*p,55*p,80*p,2,179);
+    fill(28, 25, 25); // hat
+    arc(x+77*p,y+58*p,83*p,-56*p,0,178);
+    stroke(23, 21, 21); // nose
+    fill(235, 171, 127);
+    bezier(x+80*p, y+94*p, x+95*p, y+103*p, x+83*p, y+110*p, x+74*p, y+106*p);
+    
+};
+drawDavid(265,258,55);
+};
+
+
+
+draw = function() {
+    if (currentScreen === 0) {
+        splashScreen();
+         // Display the start button
+    } else if (currentScreen === 1) {
+        mainScreen();
+        // ... (existing code for the main screen)
+        
+    }
+};
+
+mouseClicked = function() {
+    if (currentScreen === 0) {
+       startButton.handleMouseClick(); 
+    }
+};
+background(255, 255, 255);
+fill(255, 0, 0);
+rect(20, 20, 150, 200);
+
+var gameScreen = function () {
+    // Clear the background
+    background(0, 150, 0); // You can choose your game background color
+    
+    // Implement your game logic here
+    // For example, create cards, a dealer, and a player
+    // You might want to create objects for cards, player, dealer, etc.
+    
+    // Placeholder text for demonstration
+    textSize(30);
+    fill(255);
+    text("Game Screen", 100, 100);
+};
+
+// Modify the mouseClicked function to switch screens
+mouseClicked = function() {
+    if (currentScreen === 0) {
+        startButton.handleMouseClick(); 
+    } else if (currentScreen === 1 && gameState === "rules") {
+        // Check if the mouse is clicked on the rules text
+        if (mouseX > 12 && mouseX < width - 38 && mouseY > 29 && mouseY < height - 40) {
+            // Change the game state to the game screen
+            gameState = "game";
+        }
+    }
+};
+
+// Modify the draw function to display the appropriate screen
+draw = function() {
+    if (currentScreen === 0) {
+        splashScreen();
+    } else if (currentScreen === 1) {
+        mainScreen();
+        if (gameState === "game") {
+            gameScreen(); // Display the game screen when gameState is "game"
+        }
+        // Existing code for the main screen
+    }
+};
