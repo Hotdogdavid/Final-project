@@ -1,0 +1,173 @@
+var suits = ["Hearts", "Clubs", "Diamonds", "Spades"];
+var values = ["Ace", "King", "Queen", "Jack", "Ten", "Nine", "Eight", "Seven", "Six", "Five", "Four", "Three", "Two"];
+
+var deck = [];
+
+// creating the deck
+for(var i = 0; i < suits.length; i++) {
+    for (var j = 0; j < values.length; j++) {
+        var card = {
+            suit: suits[i],
+            value: values[j]
+        };
+        deck.push(card);
+    }
+}
+
+var playerHand = [];
+var dealerHand = [];
+var playerScore = 0;
+var dealerScore = 0;
+var gameOver = false;
+
+// function to get a random card from the deck
+var randomCard = function() {
+    var randomIndex = Math.floor(Math.random()* deck.length);
+    return deck.splice(randomIndex, 1)[0];
+};
+
+// function to calculate the score of a hand
+var calculateScore = function(hand) {
+    var score = 0;
+    var aceCount = 0;
+    
+    for (var i= 0; i < hand.length; i++) {
+        var cardValue = hand[i].value;
+            if (cardValue === "Ace") {
+                aceCount += 11;
+            }
+            else if (cardValue === "King" || cardValue === "Queen" || cardValue === "Jack") {
+                score += 10;
+            }
+            else {
+                score += parseInt(cardValue, 10);
+            }
+    }
+    // adjusting score for Aces
+    while (aceCount > 0 && score + 10 <= 21) {
+        score += 10;
+        aceCount--;
+    }
+    return score;
+};
+
+// function to deal initial hand
+var dealHand = function() {
+    playerHand.push(randomCard());
+    playerHand.push(randomCard());
+    dealerHand.push(randomCard());
+    dealerHand.push(randomCard());
+
+    playerScore = calculateScore(playerHand);
+    dealerScore = calculateScore(dealerHand);
+};
+// check for blackjack
+var checkBlackjack = function() {
+    return (playerScore === 21 && playerHand.length === 2) || (dealerScore === 21 && dealerHand.length === 2);
+};
+
+var displayHands = function() {
+    fill(255, 0, 0);
+    text("Player Hand", 20, 40);
+    for (var i = 0; i < playerHand.length; i++) {
+        text(playerHand[i].value+ " of " + playerHand[i].suit, 20, 60 + (i*20)); 
+    }
+    text("dealer's Hand", 20, 200);
+    for (var i = 0; i < dealerHand.length; i++) {
+        text(dealerHand[i].value + " of " + dealerHand[i].suit, 20, 220+ (i*20));
+    }
+};
+
+var drawButtons = function() {
+    fill(0, 255, 0);
+    rect(20, 260, 60, 30);
+    fill(255, 0, 0);
+    text("Hit", 35, 280);
+    
+    fill(0, 255, 0);
+    rect(100, 260, 60, 30);
+    fill(255, 0, 0);
+    text("Stand", 110, 280);
+};
+
+var displayScores = function() {
+    text("Player Score: " + playerScore, 20, 350);
+    text("Dealer Score: " + dealerScore, 20, 380);
+};
+
+var displayResult = function(result) {
+    fill(0, 0, 0);
+    textSize(20);
+    textAlign(CENTER);
+    text(result, 200, 350);
+    displayScores();
+    gameOver = true;
+};
+
+
+// function to check or a winner en the game is over
+var determineWinner = function() {
+    playerScore = calculateScore(playerHand);
+    dealerScore = calculateScore(dealerHand);
+    
+    if (playerScore > 21 && dealerScore > 21) {
+        displayResult("Both Bust! It's a tie!", 200, 350);
+    } else if (playerScore > 21) {
+        displayResult("Player Busts! Dealer Wins!", 200, 350);
+    } else if (dealerScore > 21) {
+        displayResult("Dealer Busts! Player Wins!", 200, 350);
+    } else if (playerScore > dealerScore) {
+        displayResult("Player Wins!");
+    } else if (dealerScore > playerScore) {
+        displayResult("Dealer Wins!");
+    } else {
+        displayResult("It's a tie!");
+    }
+    
+};
+// function to handle the hit action
+var hit = function() {
+    if (!gameOver) {
+        playerHand.push(randomCard());
+        playerScore = calculateScore(playerHand);
+        displayHands();
+        if (playerScore > 21) {
+            displayResult("Player Busts! Dealer Wins!");
+            gameOver = true;
+        }
+    }
+};
+
+// function to handle the stand action
+var stand = function() {
+    if (!gameOver) {
+        while (calculateScore(dealerHand) < 17) {
+            dealerHand.push(randomCard());
+        }
+        dealerScore = calculateScore(dealerHand);
+        displayHands();
+        
+        if (dealerScore > 21) {
+            displayResult("Dealer Busts! Player Wins!");
+            gameOver = true;
+        }else {
+            determineWinner();
+            gameOver = true;
+        }
+    }
+};
+
+// function to handle mouse clicks
+mouseClicked = function() {
+if (!gameOver) {
+    if (mouseX >= 20 && mouseX <= 80 && mouseY >= 260 && mouseY <= 290) {
+        hit();
+    }
+    else if (mouseX >= 100 && mouseX<= 160 && mouseY >= 260 && mouseY <= 290) {
+        stand();
+      }
+    }
+};
+    dealHand();
+    displayHands();
+    drawButtons();
