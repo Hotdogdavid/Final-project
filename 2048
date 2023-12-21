@@ -1,0 +1,870 @@
+var currentScreen = 0;
+var gameState = "rules";
+var Button = function(config) {
+    this.x = config.x || 0;
+    this.y = config.y || 0;
+    this.width = config.width || 150;
+    this.height = config.height || 50;
+    this.label = config.label || "Click";
+    this.onClick = config.onClick || function() {};
+};
+
+Button.prototype.draw = function() {
+    fill(0, 234, 255);
+    rect(this.x, this.y, this.width, this.height, 5);
+    fill(0, 0, 0);
+    textSize(19);
+    textAlign(LEFT, TOP);
+    text(this.label, this.x+10, this.y+this.height/4);
+};
+
+Button.prototype.isMouseInside = function() {
+    return mouseX > this.x &&
+           mouseX < (this.x + this.width) &&
+           mouseY > this.y &&
+           mouseY < (this.y + this.height);
+};
+
+Button.prototype.handleMouseClick = function() {
+    if (this.isMouseInside()) {
+        this.onClick();
+    }
+};
+
+var startButton = new Button({
+    x: 133,
+    y: 100,
+    label: "        Start",
+    onClick: function() {
+        currentScreen = 1;
+    }
+});
+
+var mainScreen = function () {
+    background(237, 130, 130);
+    currentScreen = 1;
+    textSize(12);
+    text("This is where the game will be introduced", 89, 6);
+   // Adding 2048 rules
+  var rulesText = "Rules of 2048:\n\n" +
+         "1. The goal is to slide tiles on a grid to combine them and create a tile with the number 2048.\n\n" +
+        "2. When two tiles with the same number touch, they merge into one tile with double the value.\n\n" +
+        "3. Use arrow keys (Up, Down, Left, Right) to move the tiles across the board.\n\n" +
+        "4. New tiles with values of 2 or 4 appear randomly after each move in an empty spot.\n\n" +
+        "5. If the grid fills up and no more moves are possible, the game ends.\n\n" +
+        "6. Strategize and plan your moves to reach the 2048 tile."
+;
+    
+    fill(0); // Set text color to black
+    text(rulesText, 12, 29, width - 38, height - 40);
+};
+
+
+    
+var splashScreen = function() {
+        background(237, 237, 237); //  background for splash screen
+        currentScreen = 0;
+        textSize(24);
+        fill(0);
+        text("Welcome to Our 2048 Game",52, 54); // Text displaying app name
+        textSize(20);
+        text("Partner 1: Bryan", 26, 369); // Partner 1's Name 
+        text("Partner 2: David", 235, 369); // Partner 2's Name
+        startButton.draw();
+      noStroke();
+var drawHead= function (x,y,h){
+    var p = h/100;
+fill(250, 209, 165); // skin tone
+ellipse(x+(p*100),y+(p*100),p*83,p*100); // head
+
+fill(237, 237, 237);
+arc(x+(p*58),y+(p*137),p*28,p*55,0,361); // left chisel 
+arc(x+(p*142),y+(p*137),p*28,p*55,0,361); // right chisel
+
+
+fill(165,42,42);
+quad(x+(p*50),y+(p*100),x+(p*63),y+(p*68),x+(p*90),y+(p*50),x+(p*70),y+(p*99)); // left hair
+quad(x+(p*149),y+(p*98),x+(p*134),y+(p*68),x+(p*113),y+(p*50),x+(p*135),y+(p*97)); // right hair
+ellipse(x+(p*100),y+(p*63),p*62,p*28); //top hair
+
+fill(0, 0, 0);
+ellipse(x+(p*101),y+(p*63),p*75,p*31); // Top of Hat
+ellipse(x+(p*132),y+(p*74),p*72,p*11); // Side of Hat
+
+fill(255, 255, 255);
+ellipse(x+(p*117),y+(p*100),p*15,p*15); // Right eye
+ellipse(x+(p*90),y+(p*100),p*15,p*15); // Left eye
+
+fill(165,42,42);
+ellipse(x+(p*90),y+(p*100),p*5,p*5); // Left eye pupil 
+ellipse(x+(p*117),y+(p*100),p*5,p*5); // Right eye pupil
+
+strokeWeight(2);
+fill(250, 209, 165); // skin tone
+stroke(0, 0, 0);
+bezier(x+(p*100),y+(p*100),x+(p*121),y+(p*122),x+(p*92),y+(p*120),x+(p*96),y+(p*115)); // nose
+
+stroke(0, 0, 0);
+fill(255, 255, 255); // white fill for mouth
+arc(x+(p*103),y+(p*125),p*30,p*13,1,180); // mouth
+line(x+(p*86),y+(p*124),x+(p*119),y+(p*124)); // top of mouth
+
+noStroke();
+fill(250, 209, 165);
+arc(x+(p*102),y+(p*144),p*57,p*22,19,380); // neck
+};
+var drawBody= function(x,y,h){
+noStroke();
+ var p = h/100;
+fill(0, 0, 0);
+quad(x+(p*30),y+(p*194),x+(p*63),y+(p*138),x+(p*101),y+(p*147),x+(p*99),y+(p*203)); // left side shirt
+quad(x+(p*176),y+(p*201),x+(p*139),y+(p*135),x+(p*96),y+(p*146),x+(p*94),y+(p*202)); // Right side shirt
+
+
+stroke(255,215,0);
+line(x+(p*129),y+(p*141),x+(p*98),y+(p*164));//Left side chain
+line(x+(p*74),y+(p*141),x+(p*98),y+(p*164)); // right side chain
+
+stroke(255, 255, 255);
+strokeWeight(2);
+line(x+(p*65),y+(p*156),x+(p*64),y+(p*188)); // B
+line(x+(p*79),y+(p*166),x+(p*65),y+(p*166)); // B
+line(x+(p*79),y+(p*166),x+(p*79),y+(p*157)); // B
+line(x+(p*78),y+(p*157),x+(p*65),y+(p*157)); // B
+line(x+(p*81),y+(p*183),x+(p*70),y+(p*166)); // B
+line(x+(p*81),y+(p*182),x+(p*63),y+(p*185)); // B
+
+line(x+(p*126),y+(p*156),x+(p*127),y+(p*188)); // R
+line (x+(p*126),y+(p*173),x+(p*146),y+(p*189)); // R
+line(x+(p*125),y+(p*157),x+(p*142),y+(p*157)); // R
+line(x+(p*127),y+(p*176),x+(p*141),y+(p*159)); // R
+};
+
+var drawBitmoji= function(x,y,h){
+    drawHead(x,y,h);
+    drawBody(x,y,h);
+};
+drawBitmoji(41,248,55);
+
+var drawDavid = function(x,y,h){
+    var p = h/100;
+    fill(235, 171, 127);
+    ellipse(x+78*p,y+94*p,77*p,100*p); // face
+    fill(143, 79, 79);
+    ellipse(x+60*p,y+80*p,15*p,15*p); // left eye
+    ellipse(x+92*p,y+79*p,15*p,15*p); // right eye
+    fill(255, 255, 255); // mouth
+    arc(x+78*p,y+118*p,44*p,11*p,-86,274);
+    fill(23, 21, 21); // chest
+    quad(x+136*p,y+134*p,x+128*p,y+134*p,x+20*p,y+134*p,x+76*p,y+198*p);
+    fill(0, 0, 0); // chain
+    stroke(230, 255, 0);
+    arc(x+78*p,y+136*p,55*p,80*p,2,179);
+    fill(28, 25, 25); // hat
+    arc(x+77*p,y+58*p,83*p,-56*p,0,178);
+    stroke(23, 21, 21); // nose
+    fill(235, 171, 127);
+    bezier(x+80*p, y+94*p, x+95*p, y+103*p, x+83*p, y+110*p, x+74*p, y+106*p);
+    
+};
+drawDavid(265,258,55);
+};
+
+
+
+
+draw = function() {
+    if (currentScreen === 0) {
+        splashScreen();
+         // Display the start button
+    } else if (currentScreen === 1) {
+        mainScreen();
+        // ... (existing code for the main screen)
+        
+    }
+};
+
+mouseClicked = function() {
+    if (currentScreen === 0) {
+       startButton.handleMouseClick(); 
+    }
+};
+background(255, 255, 255);
+fill(255, 0, 0);
+rect(20, 20, 150, 200);
+
+var gameScreen = function () {
+    // Clear the background
+    background(0, 150, 0); // You can choose your game background color
+   textAlign(CENTER, CENTER);
+noStroke();
+var score = 0,
+    moves = 0,
+
+    // If you have won
+    won = false,
+    next = false,
+
+    // If you lost
+    lost = false,
+
+    // The amount of squares per row
+    sz = 4,
+
+    // The time of an animation (fps)
+    animTime = 8,
+
+    // The time of a move animation (fps)
+    moveTime = 7,
+
+    // The animation timer
+    animTimer = 0,
+
+    // The colors of the tiles
+    colors = [
+        color(216, 202, 230), // 2
+        color(250, 206, 135), // 4
+        color(184, 68, 68), // 8
+        color(20, 173, 255), // 16
+        color(252, 210, 0), // 32
+        color(250, 68, 156), // 64
+        color(250, 239, 208), // 128
+        color(140, 82, 227), // 256
+        color(255, 112, 46), // 512
+        color(237, 197, 63), // 1024
+        color(136, 255, 0) // 2048
+    ],
+
+    // The colors of the text on the tiles
+    txtColors = [
+        color(255, 255, 255),
+    ],
+
+    // Stores the tiles
+    tiles = [],
+
+    // Makes key interaction easier
+    keys = [],
+    keyPressed = function () {
+        keys[keyCode] = true;
+        if (keyCode === 76) {
+            animTimer = 0;
+        }
+    },
+
+    // Each tile
+    Tile = function (x, y, num, startAnim, joinAnim, px, py) {
+        this.s = 0;
+        this.m = 0;
+        this.canMerge = true;
+        this.moveCount = 0;
+
+        this.x = x;
+        this.y = y;
+        this.sz = (400 / sz) - 15;
+
+        px = px === 0 ? px : px || x;
+        py = py === 0 ? py : py || y;
+
+        this.pX = px !== null ? px : x;
+        this.pY = py !== null ? py : y;
+        this.pSz = this.sz;
+
+        if (startAnim) {
+            this.pX = x + this.sz / (400 / sz) / 2.5;
+            this.pY = y + this.sz / (400 / sz) / 2.5;
+            this.pSz = this.sz / 5;
+        }
+
+        this.joinAnim = joinAnim;
+        this.join = false;
+
+        this.nX = x;
+        this.nY = y;
+        this.nSz = this.sz;
+
+        this.num = joinAnim ? num - 1 : num;
+    };
+Tile.prototype.draw = function () {
+    if (animTimer <= moveTime) {
+        if (this.m < 0.9) {
+            this.m += 1 / moveTime;
+        } else if (this.joinAnim) {
+            this.num++;
+            this.pX = this.x + this.sz / (400 / sz) - this.sz / (400 / sz) * 1.1;
+            this.pY = this.y + this.sz / (400 / sz) - this.sz / (400 / sz) * 1.1;
+            this.pSz = this.sz * 1.2;
+            this.joinAnim = false;
+            this.join = true;
+        }
+    } else if (animTimer >= moveTime) {
+        if (this.s < 0.9) {
+            this.s += 1 / animTime;
+        }
+    }
+
+    if (this.join) {
+        this.s = constrain(this.s, 0, 1);
+        this.sz = lerp(this.pSz, this.nSz, this.s);
+        this.x = lerp(this.pX, this.nX, this.s);
+        this.y = lerp(this.pY, this.nY, this.s);
+    } else {
+        this.m = constrain(this.m, 0, 1);
+        this.sz = lerp(this.pSz, this.nSz, this.m);
+        this.x = lerp(this.pX, this.nX, this.m);
+        this.y = lerp(this.pY, this.nY, this.m);
+    }
+
+    strokeWeight(1);
+    if (this.num > 5 && this.num < colors.length) {
+        noStroke();
+        for (var i = -this.num * 3; i < this.num * 3; i++) {
+            fill(lerpColor(color(237, 206, 113), colors[this.num], 0.4), 8 - i / 4);
+            ellipse(this.x * (400 / sz) - i / 2 + this.sz / 2, this.y * (400 / sz) - i / 2 + this.sz / 2, this.sz + i, this.sz + i);
+        }
+        stroke(255, 75);
+    } else {
+        noStroke();
+    }
+
+    fill(colors[this.num] || color(61, 58, 51));
+    if (this.joinAnim) {
+        ellipse(this.nX * (400 / sz) + this.nSz / 2, this.nY * (400 / sz) + this.nSz / 2, this.nSz, this.nSz);
+    }
+    ellipse(this.x * (400 / sz) + this.sz / 2, this.y * (400 / sz) + this.sz / 2, this.sz, this.sz);
+
+    fill(txtColors[this.num]);
+    textSize(this.num < 6 ? this.sz / 2 : this.num < 9 ? this.sz / 2.5 : this.num < 13 ? this.sz / 3 : this.sz / 3.5);
+    if (this.joinAnim) {
+        text(pow(2, this.num + 1), this.nX * (400 / sz) + this.nSz / 2, this.nY * (400 / sz) + this.nSz / 2);
+    }
+    text(pow(2, this.num + 1), this.x * (400 / sz) + this.sz / 2, this.y * (400 / sz) + this.sz / 2);
+    noStroke();
+};
+
+
+// loads the "grid"
+for (var i = 0; i < sz; i ++) {
+    var k = [];
+    for (var j = 0; j < sz; j ++) {
+        k.push(' ');
+    }
+    tiles.push(k);
+}
+
+
+// Add a new random tile
+var newRandTile = function() {
+    var cells = [];
+    for (var y = 0; y < tiles.length; y ++) {
+        for (var x = 0; x < tiles[y].length; x ++) {
+            if (tiles[y][x] === ' ') {
+                cells.push({x: x, y: y});
+            }
+        }
+    }
+    var cell = cells[floor(random(0, cells.length))];
+    var y = cell.y;
+    var x = cell.x;
+    var num = random() > 0.9 ? 1 : 0;
+    tiles[y][x] = new Tile(x, y, num, true);
+};
+
+
+// User interaction
+var updateTiles = function() {
+    var n = false;
+    var newTiles = [];
+
+    // Moves tiles
+    if (keys[UP]) {
+        for (var i = 0; i < sz; i ++) {
+            for (var y = 0; y < tiles.length-3; y ++) {
+                for (var x = 0; x < tiles[y].length; x ++) {
+                    if (tiles[y][x] === ' ' && tiles[y+1][x] === ' ' && tiles[y+2][x] === ' ' && typeof tiles[y+3][x] === 'object') {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y+3][x].num, false, false, x, y+3);
+                        tiles[y+3][x] = ' ';
+                    }
+
+                    if (tiles[y][x].num === tiles[y+3][x].num && tiles[y+1][x] === ' ' && tiles[y+2][x] === ' ' && tiles[y][x].y !== tiles[y+3][x].y && tiles[y][x].canMerge && tiles[y+3][x].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y+3][x].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y+3][x] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x,
+                            py: y+3
+                        });
+                    }
+                }
+            }
+            for (var y = 0; y < tiles.length-2; y ++) {
+                for (var x = 0; x < tiles[y].length; x ++) {
+                    if (tiles[y][x] === ' ' && tiles[y+1][x] === ' ' && typeof tiles[y+2][x] === 'object') {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y+2][x].num, false, false, x, y+2);
+                        tiles[y+2][x] = ' ';
+                    }
+
+                    if (tiles[y][x].num === tiles[y+2][x].num && tiles[y+1][x] === ' ' && tiles[y][x].y !== tiles[y+2][x].y && tiles[y][x].canMerge && tiles[y+2][x].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y+2][x].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y+2][x] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x,
+                            py: y+2
+                        });
+                    }
+                }
+            }
+            for (var y = 0; y < tiles.length-1; y ++) {
+                for (var x = 0; x < tiles[y].length; x ++) {
+                    if (tiles[y][x] === ' ') {
+                        if (tiles[y+1][x] !== undefined && typeof tiles[y+1][x] === 'object') {
+                            n = true;
+                            tiles[y][x] = new Tile(x, y, tiles[y+1][x].num, false, false, x, y+1);
+                            tiles[y+1][x] = ' ';
+                        }
+                        for (var j = 0; j < newTiles.length; j ++) {
+                            if (x === newTiles[j].x && y+1 === newTiles[j].y) {
+                                n = true;
+                                newTiles[j].y = y;
+                            }
+                        }
+                    }
+
+                    if (tiles[y][x].num === tiles[y+1][x].num && tiles[y][x].y !== tiles[y+1][x].y && tiles[y][x].canMerge && tiles[y+1][x].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y+1][x].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y+1][x] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x,
+                            py: y+1
+                        });
+                    }
+                }
+            }
+        }
+    }
+    if (keys[DOWN]) {
+        for (var i = 0; i < sz; i ++) {
+            for (var y = 3; y < tiles.length; y ++) {
+                for (var x = 0; x < tiles[y].length; x ++) {
+                    if (tiles[y][x] === ' ' && tiles[y-1][x] === ' ' && tiles[y-2][x] === ' ' && typeof tiles[y-3][x] === 'object') {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y-3][x].num, false, false, x, y-3);
+                        tiles[y-3][x] = ' ';
+                    }
+                }
+            }
+            for (var y = tiles.length-1; y > 2; y --) {
+                for (var x = 0; x < tiles[y].length; x ++) {
+                    if (tiles[y][x].num === tiles[y-3][x].num && tiles[y-1][x] === ' ' && tiles[y-2][x] === ' ' && tiles[y][x].y !== tiles[y-3][x].y && tiles[y][x].canMerge && tiles[y-3][x].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y-3][x].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y-3][x] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x,
+                            py: y-3
+                        });
+                    }
+                }
+            }
+            for (var y = 2; y < tiles.length; y ++) {
+                for (var x = 0; x < tiles[y].length; x ++) {
+                    if (tiles[y][x] === ' ' && tiles[y-2][x] === ' ' && typeof tiles[y-2][x] === 'object') {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y-2][x].num, false, false, x, y-2);
+                        tiles[y-2][x] = ' ';
+                    }
+                }
+            }
+            for (var y = tiles.length-1; y > 1; y --) {
+                for (var x = 0; x < tiles[y].length; x ++) {
+                    if (tiles[y][x].num === tiles[y-1][x].num && tiles[y-1][x] === ' ' && tiles[y][x].y !== tiles[y-2][x].y && tiles[y][x].canMerge && tiles[y-2][x].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y-2][x].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y-2][x] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x,
+                            py: y-2
+                        });
+                    }
+                }
+            }
+            for (var y = 1; y < tiles.length; y ++) {
+                for (var x = 0; x < tiles[y].length; x ++) {
+                    if (tiles[y][x] === ' ') {
+                        if (typeof tiles[y-1][x] === 'object') {
+                            n = true;
+                            tiles[y][x] = new Tile(x, y, tiles[y-1][x].num, false, false, x, y-1);
+                            tiles[y-1][x] = ' ';
+                        }
+                        for (var j = 0; j < newTiles.length; j ++) {
+                            if (x === newTiles[j].x && y-1 === newTiles[j].y) {
+                                n = true;
+                                newTiles[j].y = y;
+                            }
+                        }
+                    }
+                }
+            }
+            for (var y = tiles.length-1; y > 0; y --) {
+                for (var x = 0; x < tiles[y].length; x ++) {
+                    if (tiles[y][x].num === tiles[y-1][x].num && tiles[y][x].y !== tiles[y-1][x].y && tiles[y][x].canMerge && tiles[y-1][x].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y-1][x].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y-1][x] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x,
+                            py: y-1
+                        });
+                    }
+                }
+            }
+        }
+    }
+    if (keys[LEFT]) {
+        for (var i = 0; i < sz; i ++) {
+            for (var y = 0; y < tiles.length; y ++) {
+                for (var x = 0; x < tiles[y].length-3; x ++) {
+                    if (tiles[y][x] === ' ' && tiles[y][x+1] === ' ' && tiles[y][x+2] === ' ' && typeof tiles[y][x+3] === 'object') {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y][x+3].num, false, false, x+3, y);
+                        tiles[y][x+3] = ' ';
+                    }
+
+                    if (tiles[y][x].num === tiles[y][x+2].num && tiles[y][x+1] === ' ' && tiles[y][x+2] === ' ' && tiles[y][x].x !== tiles[y][x+3].x && tiles[y][x].canMerge && tiles[y][x+3].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y][x].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y][x+3] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x+3,
+                            py: y
+                        });
+                    }
+                }
+                for (var x = 0; x < tiles[y].length-2; x ++) {
+                    if (tiles[y][x] === ' ' && tiles[y][x+1] === ' ' && typeof tiles[y][x+2] === 'object') {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y][x+2].num, false, false, x+2, y);
+                        tiles[y][x+2] = ' ';
+                    }
+
+                    if (tiles[y][x].num === tiles[y][x+2].num && tiles[y][x+1] === ' ' && tiles[y][x].x !== tiles[y][x+2].x && tiles[y][x].canMerge && tiles[y][x+2].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y][x].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y][x+2] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x+2,
+                            py: y
+                        });
+                    }
+                }
+                for (var x = 0; x < tiles[y].length-1; x ++) {
+                    if (tiles[y][x] === ' ') {
+                        if (tiles[y][x+1] !== undefined && typeof tiles[y][x+1] === 'object') {
+                            n = true;
+                            tiles[y][x] = new Tile(x, y, tiles[y][x+1].num, false, false, x+1, y);
+                            tiles[y][x+1] = ' ';
+                        }
+                        for (var j = 0; j < newTiles.length; j ++) {
+                            if (x+1 === newTiles[j].x && y === newTiles[j].y) {
+                                n = true;
+                                newTiles[j].x = x;
+                            }
+                        }
+                    }
+
+                    if (tiles[y][x].num === tiles[y][x+1].num && tiles[y][x].x !== tiles[y][x+1].x && tiles[y][x].canMerge && tiles[y][x+1].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y][x].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y][x+1] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x+1,
+                            py: y
+                        });
+                    }
+                }
+            }
+        }
+    }
+    if (keys[RIGHT]) {
+        for (var i = 0; i < sz; i ++) {
+            for (var y = 0; y < tiles.length; y ++) {
+                for (var x = 3 ; x < tiles[y].length; x ++) {
+                    if (tiles[y][x] === ' ' && tiles[y][x-1] === ' ' && tiles[y][x-2] === ' ' && typeof tiles[y][x-3] === 'object') {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y][x-3].num, false, false, x-3, y);
+                        tiles[y][x-3] = ' ';
+                    }
+                }
+                for (var x = tiles[y].length-1; x > 2; x --) {
+                    if (tiles[y][x].num === tiles[y][x-3].num && tiles[y][x-1] === ' ' && tiles[y][x-2] === ' ' && tiles[y][x].x !== tiles[y][x-3].x && tiles[y][x].canMerge && tiles[y][x-3].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y][x-3].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y][x-3] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x-3,
+                            py: y
+                        });
+                    }
+                }
+                for (var x = 2; x < tiles[y].length; x ++) {
+                    if (tiles[y][x] === ' ' && tiles[y][x-1] === ' ' && typeof tiles[y][x-2] === 'object') {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y][x-2].num, false, false, x-2, y);
+                        tiles[y][x-2] = ' ';
+                    }
+                }
+                for (var x = tiles[y].length-1; x > 1; x --) {
+                    if (tiles[y][x].num === tiles[y][x-2].num && tiles[y][x-1] === ' ' && tiles[y][x].x !== tiles[y][x-2].x && tiles[y][x].canMerge && tiles[y][x-2].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y][x-2].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y][x-2] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x-2,
+                            py: y
+                        });
+                    }
+                }
+                for (var x = 1; x < tiles[y].length; x ++) {
+                    if (tiles[y][x] === ' ') {
+                        if (typeof tiles[y][x-1] === 'object') {
+                            n = true;
+                            tiles[y][x] = new Tile(x, y, tiles[y][x-1].num, false, false, x-1, y);
+                            tiles[y][x-1] = ' ';
+                        }
+                        for (var j = 0; j < newTiles.length; j ++) {
+                            if (x-1 === newTiles[j].x && y === newTiles[j].y) {
+                                n = true;
+                                newTiles[j].x = x;
+                            }
+                        }
+                    }
+                }
+                for (var x = tiles[y].length-1; x > 0; x --) {
+                    if (tiles[y][x].num === tiles[y][x-1].num && tiles[y][x].x !== tiles[y][x-1].x && tiles[y][x].canMerge && tiles[y][x-1].canMerge) {
+                        n = true;
+                        tiles[y][x] = new Tile(x, y, tiles[y][x-1].num);
+                        tiles[y][x].canMerge = false;
+                        tiles[y][x-1] = ' ';
+                        newTiles.push({
+                            x: x,
+                            y: y,
+                            num: tiles[y][x].num+1,
+                            px: x-1,
+                            py: y
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    // Merges tiles
+    for (var y = 0; y < tiles.length; y ++) {
+        for (var x = 0; x < tiles[y].length; x ++) {
+            for (var i = 0; i < newTiles.length; i ++) {
+                if (x === newTiles[i].x && y === newTiles[i].y) {
+                    var num = newTiles[i].num;
+                    var px = newTiles[i].px;
+                    var py = newTiles[i].py;
+                    tiles[y][x] = new Tile(x, y, num, false, true, px, py);
+                    score += pow(2, num+1);
+                }
+            }
+        }
+    }
+
+    if (n) {
+        newRandTile();
+        animTimer = 0;
+        moves ++;
+    }
+};
+
+
+// Checks if you have lost yet
+var checkLost = function() {
+    var hasLost = true;
+    if ((tiles+'').indexOf(', ') === -1 && (tiles+'').indexOf(' ,') === -1) {
+        for (var y = 0; y < tiles.length; y ++) {
+            for (var x = 0; x < tiles[y].length-1; x ++) {
+                if (tiles[y][x].num === tiles[y][x+1].num) {
+                    hasLost = false;
+                }
+            }
+        }
+        for (var y = 0; y < tiles.length-1; y ++) {
+            for (var x = 0; x < tiles[y].length; x ++) {
+                if (tiles[y][x].num === tiles[y+1][x].num) {
+                    hasLost = false;
+                }
+            }
+        }
+        if (hasLost) {
+            lost = true;
+        }
+    }
+};
+
+
+// Adds two tiles to start with
+newRandTile();
+newRandTile();
+
+
+// Runs the program
+draw = function() {
+    pushMatrix();
+    translate(15, 15);
+    scale(385/400);
+
+    background(0, 0, 0);
+    
+    noStroke();
+    fill(200, 184, 173);
+    for (var x = 0; x < sz; x ++) {
+        for (var y = 0; y < sz; y ++) {
+            ellipse(x*(388/sz) + (400/sz)/2, y*(400/sz) + (348/sz)/2, 400/sz - 15, 400/sz - 15);
+        }
+    }
+    
+    for (var y = 0; y < tiles.length; y ++) {
+        for (var x = 0; x < tiles[y].length; x ++) {
+            if (tiles[y][x] !== ' ') {
+                tiles[y][x].draw();
+                if (tiles[y][x].num === floor(pow(sz, 1.7)) + 2) {
+                    won = true;
+                }
+            }
+        }
+    }
+
+    popMatrix();
+    
+    if (frameCount >= 152) {
+        if (keys[32]) {
+            Program.restart();
+        }
+    
+        animTimer ++;
+    
+        if (won && next || !won) {
+            updateTiles();
+            checkLost();
+        }
+    }
+    if (won && !next) {
+        fill(colors[10], lerp(0, 150, min(animTimer/20, 1)));
+        rect(0, 0, 400, 400);
+    
+        fill(255, lerp(0, 255, min(animTimer/20, 1)));
+        textSize(50);
+        text('You won!', 200, 150);
+        textSize(30);
+        text('score: ' + (score + 2) + '\nmoves: ' + (moves + 2), 200, 230);
+    
+        fill(255, lerp(0, 220, min(animTimer/20, 1)));
+        textSize(20);
+        text('click to continue playing', 200, 366);
+    
+        if (mouseIsPressed) {
+            next = true;
+        }
+    }
+    if (lost) {
+        fill(255, 80, 70, lerp(0, 150, min(animTimer/20, 1)));
+        rect(0, 0, 400, 400);
+    
+        fill(255, lerp(0, 255, min(animTimer/20, 1)));
+        textSize(50);
+        text('You lost', 200, 150);
+        textSize(30);
+        text('Your score: ' + (score + 2) + '\nmoves: ' + (moves + 2), 200, 230);
+    
+        fill(255, lerp(0, 220, min(animTimer/20, 1)));
+        textSize(20);
+        text('press space to try again', 200, 366);
+    }
+    
+    
+    keys[keyCode] = false;
+};
+
+    // Placeholder text for demonstration
+    textSize(30);
+    fill(255);
+    text("Game Screen", 100, 100);
+};
+
+// Modify the mouseClicked function to switch screens
+mouseClicked = function() {
+    if (currentScreen === 0) {
+        startButton.handleMouseClick(); 
+    } else if (currentScreen === 1 && gameState === "rules") {
+        // Check if the mouse is clicked on the rules text
+        if (mouseX > 12 && mouseX < width - 38 && mouseY > 29 && mouseY < height - 40) {
+            // Change the game state to the game screen
+            gameState = "game";
+        }
+    }
+};
+
+// Modify the draw function to display the appropriate screen
+draw = function() {
+    if (currentScreen === 0) {
+        splashScreen();
+    } else if (currentScreen === 1) {
+        mainScreen();
+        if (gameState === "game") {
+            gameScreen(); // Display the game screen when gameState is "game"
+        }
+        // Existing code for the main screen
+    }
+};
